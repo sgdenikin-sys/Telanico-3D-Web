@@ -1,0 +1,132 @@
+name: Import tested 3D Web build
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: 'Successful private Telanico-3D-Lab Godot Web workflow run ID'
+        required: true
+        type: string
+        default: '39173186071'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Import verified Web artifact and publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout public deployment repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Verify source run and read-only access token
+        env:
+          GH_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${GH_TOKEN}" ]]; then
+            echo "::error::Configure TELANICO_LAB_ARTIFACT_TOKEN in this public repository's Actions secrets. Grant Actions: Read-only to the private Telanico-3D-Lab repository only."
+            exit 1
+          fi
+          if [[ ! "${SOURCE_RUN_ID}" =~ ^[0-9]+$ ]]; then
+            echo "::error::source_run_id must be numeric."
+            exit 1
+          fi
+          run_json=$(gh api "repos/sgdenikin-sys/Telanico-3D-Lab/actions/runs/${SOURCE_RUN_ID}")
+          conclusion=$(echo "$run_json" | jq -r '.conclusion')
+          workflow_name=$(echo "$run_json" | jq -r '.name')
+          echo "Source workflow: $workflow_name"
+          echo "Source conclusion: $conclusion"
+          if [[ "$conclusion" != "success" || "$workflow_name" != "Godot Web playable" ]]; then
+            echo "::error::Source must be a successful Godot Web playable workflow run."
+            exit 1
+          fi
+
+      - name: Download tested private artifact
+        env:
+          GH_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p incoming
+          gh run download "$SOURCE_RUN_ID" \
+            --repo sgdenikin-sys/Telanico-3D-Lab \
+            --name telanico-3d-web \
+            --dir incoming
+
+      - name: Verify and stage only browser build files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("incoming")
+          required = [
+              "index.html", "index.js", "index.wasm", "index.pck",
+              "index.audio.worklet.js", "index.audio.position.worklet.js",
+          ]
+          for name in required:
+              f = p / name
+              if not f.is_file() or f.stat().st_size == 0:
+                  raise SystemExit(f"Missing browser runtime: {f}")
+          if (p / "index.wasm").read_bytes()[:8] != b"\\x00asm\\x01\\x00\\x00\\x00":
+              raise SystemExit("Invalid WASM header")
+          if (p / "index.pck").read_bytes()[:4] != b"GDPC":
+              raise SystemExit("Invalid Godot PCK")
+          if any(path.is_symlink() for path in p.rglob("*")):
+              raise SystemExit("Unexpected symlink in Web artifact")
+          print("Verified Godot browser runtime files")
+          PY
+          rm -rf site
+          mkdir site
+          cp -a incoming/. site/
+          touch site/.nojekyll
+          # A public checkout must never include Blender sources, Python generators,
+          # cloud environment configuration, or source-only test logs.
+          if find site -type f \( -name '*.blend' -o -name '*.py' -o -name '*.gd' -o -name '*.sh' -o -name '*.env' \) | grep -q .; then
+            echo "::error::Unexpected source files in public site"
+            exit 1
+          fi
+
+      - name: Commit public site snapshot
+        shell: bash
+        env:
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified Telanico Web run ${SOURCE_RUN_ID}"
+            git push origin HEAD:main
+          else
+            echo "No site file changes"
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload browser files to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Publish live site
+        id: deployment
+        uses: actions/deploy-pages@v4
