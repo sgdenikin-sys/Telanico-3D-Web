@@ -84,7 +84,7 @@ jobs:
               f = p / name
               if not f.is_file() or f.stat().st_size == 0:
                   raise SystemExit(f"Missing browser runtime: {f}")
-          if (p / "index.wasm").read_bytes()[:8] != b"\\x00asm\\x01\\x00\\x00\\x00":
+          if (p / "index.wasm").read_bytes()[:8] != b"\x00asm\x01\x00\x00\x00":
               raise SystemExit("Invalid WASM header")
           if (p / "index.pck").read_bytes()[:4] != b"GDPC":
               raise SystemExit("Invalid Godot PCK")
