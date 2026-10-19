@@ -7,7 +7,11 @@ on:
         description: 'Successful private Telanico-3D-Lab Godot Web workflow run ID'
         required: true
         type: string
-        default: '39173186071'
+        default: '39244036894'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-private-web.yml'
 
 permissions:
   contents: write
@@ -34,7 +38,7 @@ jobs:
       - name: Verify source run and read-only access token
         env:
           GH_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || '39244036894' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -59,7 +63,7 @@ jobs:
       - name: Download tested private artifact
         env:
           GH_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || '39244036894' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -106,7 +110,7 @@ jobs:
       - name: Commit public site snapshot
         shell: bash
         env:
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || '39244036894' }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
