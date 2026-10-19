@@ -3,7 +3,7 @@ import datetime as dt, json, os, pathlib, shutil, subprocess, zipfile
 REPO='sgdenikin-sys/Telanico-3D-Lab';BRANCH='codex/telanico-overworld-v2'
 def api(path):return json.loads(subprocess.check_output(['gh','api',f'repos/{REPO}/{path}']))
 runs=api('actions/workflows/web-smoke.yml/runs?branch='+BRANCH+'&per_page=10')['workflow_runs']
-runs=[r for r in runs if r['head_branch']==BRANCH and r['name']=='Godot Web playable']
+runs=[r for r in runs if r['head_branch']==BRANCH and r['name']=='Godot Web playable' and r.get('head_repository',{}).get('full_name')==REPO]
 assert runs,'No allowlisted V2 build available'
 r=max(runs,key=lambda r:r['run_number'])
 assert r['status']=='completed' and r['conclusion']=='success','Newest candidate is not successful; retaining last working preview'
