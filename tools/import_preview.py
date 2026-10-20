@@ -1,11 +1,24 @@
 """Public importer: only an allowlisted, tested feature-branch browser artifact."""
 import datetime as dt, json, os, pathlib, shutil, subprocess, zipfile
-REPO='sgdenikin-sys/Telanico-3D-Lab';BRANCH='codex/telanico-overworld-v2'
+REPO='sgdenikin-sys/Telanico-3D-Lab';BRANCH='codex/telanico-overworld-v2-1'
 def api(path):return json.loads(subprocess.check_output(['gh','api',f'repos/{REPO}/{path}']))
-runs=api('actions/runs?branch='+BRANCH+'&per_page=30')['workflow_runs']
-runs=[r for r in runs if r['head_branch']==BRANCH and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO]
-assert runs,'No allowlisted V2 build available'
-r=max(runs,key=lambda r:r['created_at'])
+# Dispatch input overrides the optional release pin. Scheduled/push imports use
+# the same verified run when a release pin is present; otherwise track newest.
+pin_path=pathlib.Path('tools/preview-source.json')
+pin=json.loads(pin_path.read_text()) if pin_path.exists() else {}
+run_id=os.environ.get('TELANICO_SOURCE_RUN_ID') or pin.get('run_id')
+if run_id:
+ assert str(run_id).isdigit(),'Invalid private Actions run ID'
+ r=api(f'actions/runs/{run_id}')
+else:
+ runs=api('actions/runs?branch='+BRANCH+'&per_page=30')['workflow_runs']
+ runs=[r for r in runs if r['head_branch']==BRANCH and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO]
+ assert runs,'No allowlisted V2.1 build available'
+ r=max(runs,key=lambda r:r['created_at'])
+assert r['head_branch']==BRANCH and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO,'Untrusted source workflow/repository/branch'
+if run_id:
+ assert str(r['id'])==str(run_id),'Actions run ID mismatch'
+ if not os.environ.get('TELANICO_SOURCE_RUN_ID') and pin.get('commit'):assert r['head_sha']==pin['commit'],'Pinned commit mismatch'
 assert r['status']=='completed' and r['conclusion']=='success','Newest candidate is not successful; retaining last working preview'
 assert dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(r['updated_at'].replace('Z','+00:00'))<dt.timedelta(days=14),'Candidate artifact too old'
 old=pathlib.Path('site/build.json')

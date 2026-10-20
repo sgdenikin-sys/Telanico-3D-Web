@@ -3,9 +3,14 @@ on:
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: 'Successful private Godot Web playable run ID (optional release-pin override)'
+        required: false
+        type: string
   push:
     branches: [main]
-    paths: ['.github/workflows/import-private-web.yml', 'tools/import_preview.py']
+    paths: ['.github/workflows/import-private-web.yml', 'tools/import_preview.py', 'tools/preview-source.json']
 permissions:
   contents: write
   pages: write
@@ -27,6 +32,7 @@ jobs:
         id: candidate
         env:
           GH_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
+          TELANICO_SOURCE_RUN_ID: ${{ inputs.source_run_id }}
         run: python3 tools/import_preview.py
       - name: Commit verified public runtime snapshot
         if: steps.candidate.outputs.changed == 'true'
@@ -62,7 +68,7 @@ jobs:
               except (urllib.error.URLError, json.JSONDecodeError):meta={}
               if meta.get('commit')==expected:break
               time.sleep(5)
-          assert meta['commit']==expected,meta
+          assert meta['commit']==expected and meta.get('camera_elevation_above_horizontal')==40 and meta.get('camera_projection')=='orthographic',meta
           with sync_playwright() as p:
               browser=p.chromium.launch(headless=True,args=['--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
               for width,height in [(1440,900),(844,390)]:
@@ -73,6 +79,7 @@ jobs:
                   page.wait_for_function('window.__TELANICO_STATE?.ready',polling=500,timeout=120000)
                   state=page.evaluate('window.__TELANICO_STATE')
                   assert state['commit']==expected and len(state['sites'])==15,state
+                  assert state['elevation']==40 and state['projection']==1,state
                   assert not errors,errors
                   page.close()
               browser.close()

@@ -2,20 +2,21 @@
 import datetime as dt,io,json,os,pathlib,subprocess,sys,tempfile,unittest,zipfile
 SCRIPT=pathlib.Path(__file__).with_name('import_preview.py').resolve()
 class ImportSafety(unittest.TestCase):
- def exercise(self,*,conclusion='success',bad_sha=False,extra=False,already=False,foreign=False):
+ def exercise(self,*,conclusion='success',bad_sha=False,extra=False,already=False,foreign=False,pinned=False,bad_pin=False):
   with tempfile.TemporaryDirectory() as temp:
    root=pathlib.Path(temp);(root/'site').mkdir();old='abc123' if already else 'previous-good'
    (root/'site/build.json').write_text(json.dumps({'commit':old}));(root/'site/keep.txt').write_text('previous-good')
-   run={'id':123,'run_number':7,'name':'Godot Web playable','path':'.github/workflows/web-smoke.yml','created_at':dt.datetime.now(dt.timezone.utc).isoformat(),'head_branch':'codex/telanico-overworld-v2','head_sha':'abc123','head_repository':{'full_name':'outside/fork' if foreign else 'sgdenikin-sys/Telanico-3D-Lab'},'status':'completed','conclusion':conclusion,'updated_at':dt.datetime.now(dt.timezone.utc).isoformat(),'html_url':'https://github.com/example/actions/runs/123'}
+   run={'id':123,'run_number':7,'name':'Godot Web playable','path':'.github/workflows/web-smoke.yml','created_at':dt.datetime.now(dt.timezone.utc).isoformat(),'head_branch':'codex/telanico-overworld-v2-1','head_sha':'abc123','head_repository':{'full_name':'outside/fork' if foreign else 'sgdenikin-sys/Telanico-3D-Lab'},'status':'completed','conclusion':conclusion,'updated_at':dt.datetime.now(dt.timezone.utc).isoformat(),'html_url':'https://github.com/example/actions/runs/123'}
+   if pinned:(root/'tools').mkdir();(root/'tools/preview-source.json').write_text(json.dumps({'run_id':123,'commit':'wrong' if bad_pin else 'abc123'}))
    (root/'runs.json').write_text(json.dumps({'workflow_runs':[run]}));(root/'artifacts.json').write_text(json.dumps({'artifacts':[{'id':456,'name':'telanico-3d-web','expired':False}]}))
    with zipfile.ZipFile(root/'candidate.zip','w') as z:
     files={'index.html':b'const GODOT_THREADS_ENABLED = false; abc123','index.js':b'// test fixture','index.wasm':b'\0asm\x01\0\0\0','index.pck':b'GDPC','index.audio.worklet.js':b'// worklet','index.audio.position.worklet.js':b'// worklet','LICENSES.html':b'CC0','build.json':json.dumps({'commit':'wrong' if bad_sha else 'abc123','branch':run['head_branch'],'source_run_id':'123'}).encode()}
     if extra:files['private.blend']=b'not-public'
     for name,data in files.items():z.writestr(name,data)
-   (root/'gh').write_text('#!/usr/bin/env python3\nimport sys,pathlib\np=sys.argv[-1]\nf="candidate.zip" if p.endswith("/zip") else "artifacts.json" if p.endswith("/artifacts") else "runs.json"\nsys.stdout.buffer.write(pathlib.Path(f).read_bytes())\n');(root/'gh').chmod(0o755)
+   (root/'gh').write_text('#!/usr/bin/env python3\nimport sys,pathlib\np=sys.argv[-1]\nf="candidate.zip" if p.endswith("/zip") else "artifacts.json" if p.endswith("/artifacts") else "runs.json"\ndata=pathlib.Path(f).read_bytes()\nif p.endswith("/runs/123"):\n import json;data=json.dumps(json.loads(data)["workflow_runs"][0]).encode()\nsys.stdout.buffer.write(data)\n');(root/'gh').chmod(0o755)
    env=dict(os.environ,PATH=str(root)+os.pathsep+os.environ['PATH'],GITHUB_OUTPUT=str(root/'output'))
    result=subprocess.run([sys.executable,str(SCRIPT)],cwd=root,env=env,capture_output=True,text=True)
-   should_fail=conclusion!='success' or bad_sha or extra or foreign
+   should_fail=bad_pin or conclusion!='success' or bad_sha or extra or foreign
    if should_fail:
     self.assertNotEqual(result.returncode,0,result.stdout)
     self.assertEqual((root/'site/keep.txt').read_text(),'previous-good')
@@ -23,6 +24,10 @@ class ImportSafety(unittest.TestCase):
     self.assertEqual(result.returncode,0,result.stderr)
     self.assertIn('changed=false' if already else 'changed=true',(root/'output').read_text())
     if not already:self.assertFalse((root/'site/keep.txt').exists())
+ def test_failed_pinned_run_retains_previous(self):self.exercise(pinned=True,conclusion='failure')
+ def test_foreign_pinned_run_retains_previous(self):self.exercise(pinned=True,foreign=True)
+ def test_exact_run_pin(self):self.exercise(pinned=True)
+ def test_pin_commit_mismatch_retains_previous(self):self.exercise(pinned=True,bad_pin=True)
  def test_valid_candidate(self):self.exercise()
  def test_identical_commit_is_noop(self):self.exercise(already=True)
  def test_failed_newest_retains_previous(self):self.exercise(conclusion='failure')
