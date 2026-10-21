@@ -8,14 +8,14 @@ def api(path):return json.loads(subprocess.check_output(['gh','api',f'repos/{REP
 # the same verified run when a release pin is present; otherwise track newest.
 pin_path=pathlib.Path('tools/preview-source.json')
 pin=json.loads(pin_path.read_text()) if pin_path.exists() else {}
-run_id=os.environ.get('TELANICO_SOURCE_RUN_ID') or pin.get('run_id')
+run_id=os.environ.get('TELANICO_SOURCE_RUN_ID')
 if run_id:
  assert str(run_id).isdigit(),'Invalid private Actions run ID'
  r=api(f'actions/runs/{run_id}')
 else:
- runs=api('actions/runs?branch='+BRANCH+'&per_page=30')['workflow_runs']
- runs=[r for r in runs if r['head_branch']==BRANCH and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO]
- assert runs,'No allowlisted V2.1 build available'
+ runs=api('actions/runs?branch='+V22_BRANCH+'&per_page=30')['workflow_runs']
+ runs=[r for r in runs if r['head_branch']==V22_BRANCH and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO and r['status']=='completed' and r['conclusion']=='success']
+ assert runs,'No successful provisional V2.2 artifact yet; retaining V2.1'
  r=max(runs,key=lambda r:r['created_at'])
 assert r['head_branch'] in TRUSTED_BRANCHES and r['name']=='Godot Web playable' and r.get('path')=='.github/workflows/web-smoke.yml' and r.get('head_repository',{}).get('full_name')==REPO,'Untrusted source workflow/repository/branch'
 if run_id:
