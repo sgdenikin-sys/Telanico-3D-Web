@@ -1,10 +1,5 @@
 name: Import tested 3D Web build
 on:
-  # Releases are initiated only by an explicit reviewed source-run pin.
-  # Never automatically track the newest private branch or run on a schedule.
-  push:
-    branches: [main]
-    paths: ['tools/preview-source.json']
   workflow_dispatch:
     inputs:
       source_run_id:
