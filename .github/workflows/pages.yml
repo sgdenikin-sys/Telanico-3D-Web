@@ -1,11 +1,8 @@
 name: Publish Telanico 3D Web
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'site/**'
-      - '.github/workflows/pages.yml'
+  # Normally the verified artifact importer deploys Pages itself.
+  # Keep this as an emergency manual redeploy; do not race the importer.
   workflow_dispatch:
 
 permissions:
