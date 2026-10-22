@@ -1,7 +1,7 @@
 """Public importer: only an allowlisted, tested feature-branch browser artifact."""
 import datetime as dt, json, os, pathlib, shutil, subprocess, zipfile
 REPO='sgdenikin-sys/Telanico-3D-Lab';BRANCH='codex/telanico-overworld-v2-1'
-V22_BRANCH='fix/v22-mobile-browser-handoff'
+V22_BRANCH='codex/telanico-v2-2-story-integration'
 TRUSTED_BRANCHES={BRANCH,V22_BRANCH}
 def api(path):return json.loads(subprocess.check_output(['gh','api',f'repos/{REPO}/{path}']))
 # Dispatch input overrides the optional release pin. Scheduled/push imports use
