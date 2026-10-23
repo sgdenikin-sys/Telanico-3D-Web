@@ -51,9 +51,11 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Install browser validation
+        timeout-minutes: 4
         run: |
-          python3 -m pip install playwright==1.58.0
-          python3 -m playwright install --with-deps chromium
+          python3 -m pip install --timeout 30 --retries 2 --only-binary=:all: playwright==1.58.0
+          browser_bin=$(command -v google-chrome || command -v chromium)
+          "$browser_bin" --version
 
       - name: Verify actual public runtime and desktop/mobile opening
         env:

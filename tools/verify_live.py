@@ -2,6 +2,7 @@
 import hashlib
 import json
 import sys
+import shutil
 import time
 import urllib.request
 from pathlib import Path
@@ -28,7 +29,10 @@ for name, expected in manifest['files'].items():
 print('LIVE_RUNTIME_HASHES_PASS', commit, flush=True)
 results = []
 with sync_playwright() as p:
-    browser = p.chromium.launch(args=['--no-sandbox','--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
+    browser_bin = shutil.which('google-chrome') or shutil.which('chromium')
+    assert browser_bin, 'Expected preinstalled Chrome on ubuntu-24.04 runner'
+    print('LIVE_BROWSER', browser_bin, flush=True)
+    browser = p.chromium.launch(executable_path=browser_bin,args=['--no-sandbox','--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
     for width, height, touch in [(1280,720,False),(844,390,True)]:
         context = browser.new_context(viewport={'width':width,'height':height},has_touch=touch)
         page = context.new_page()
