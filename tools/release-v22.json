@@ -1,8 +1,7 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "2c94a3f687e7174340360885e069336b73cf599e",
-  "build_environment": "Windows workstation; official Godot 4.6.3; Blender 5.2.2",
-  "private_actions_status": "Not started: GitHub account payment/spending restriction",
+  "source_commit": "c9ef4ebf526aa77345538e8efd32ea5326d06bdc",
+  "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
     "desktop_browser": "passed",
@@ -12,15 +11,15 @@
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
-    "audio_bridge.js": "2362705269299878aa6d66c29b40ce28658d437032f2ffe37b28ac2781be1db4",
-    "build.json": "7b45127ba7c91bf3bb3bc931bbb45570d4ccab4f061f07d683466135d496c2b8",
+    "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
+    "build.json": "1c9576f01e65a84f073f9cf4c2793975855337367f75275d2918c81818a7a249",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "d9fc79c1650ff89ba4d57f5e5fe444a827ab46f60a7bb0db29e2281b43ef8037",
+    "index.html": "5dbb613268de725015f34cc9d45ce8e6a69ce8bccd94741b7397c89f3bccdb1f",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "201cf297b23f8e039cbffb0eaa0ca983921bfa677ccd147ae7f819e5e3a0b215",
+    "index.pck": "1edb1b05734e9376d1c56df86f30ed10ba69e41ccb57cc0a25795bd9db63ce73",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
@@ -30,8 +29,10 @@
     "media/door_open_playful.wav": "abec63bac7a738f87abd7002b6c179f39958a78fa5a64311a6e96acfcc462116",
     "media/menu_flip.wav": "b0c2dee811682bad337f6b9a1c214331dddc80dca2ca18c6842a3a19630855f1",
     "media/music.mp3": "dc0869cab4b4843c02f3428ab429e826794e4866bed9d1fbcfafffb6a080cef5",
+    "media/rabbit.gif": "d0893612f0e68d73c89793fb22beb0483b7dd073f473700229d4caa602541964",
     "media/select_woosh.wav": "fde0115dccdae1b57312a4892f596d079c94b62a5b89c6741ea8bf195afed97e",
     "media/swallow_takeoff.wav": "f84156f9bf73ee76a9113a93fc8c33838fe9f061082ecf744f2c190621ac171d",
-    "media/tube_water_flush.wav": "be3074938c64149734f6479718ee0ce6122017743dd2f0b2e04bf5d5b4c47f42"
+    "media/tube_water_flush.wav": "be3074938c64149734f6479718ee0ce6122017743dd2f0b2e04bf5d5b4c47f42",
+    "rabbit_animation_bridge.js": "794290e46cc62fb4ef4a44be14e446d206ccb7beb7677b64e3e153d8223d60d0"
   }
 }

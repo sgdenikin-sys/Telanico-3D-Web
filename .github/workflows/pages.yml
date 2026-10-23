@@ -8,6 +8,7 @@ on:
       - '.github/workflows/pages.yml'
       - 'tools/verify_release.py'
       - 'tools/release-v22.json'
+      - 'tools/verify_live.py'
   workflow_dispatch:
 
 permissions:
@@ -23,6 +24,7 @@ jobs:
   deploy:
     name: Deploy public Godot web build
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -47,3 +49,21 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Install browser validation
+        run: |
+          python3 -m pip install playwright==1.58.0
+          python3 -m playwright install --with-deps chromium
+
+      - name: Verify actual public runtime and desktop/mobile opening
+        env:
+          LIVE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 tools/verify_live.py "$LIVE_URL"
+
+      - name: Save live validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-validation
+          path: live-evidence/
+          if-no-files-found: ignore

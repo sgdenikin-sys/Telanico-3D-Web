@@ -1,1 +1,1 @@
-{"branch": "fix/v22-web-release", "camera_elevation_above_horizontal": 40, "camera_projection": "orthographic", "commit": "2c94a3f687e7174340360885e069336b73cf599e", "source_run_id": "local", "version": "telanico-v2.2"}
+{"branch": "main", "camera_elevation_above_horizontal": 40, "camera_projection": "orthographic", "commit": "c9ef4ebf526aa77345538e8efd32ea5326d06bdc", "source_run_id": "local", "version": "telanico-v2.2"}
