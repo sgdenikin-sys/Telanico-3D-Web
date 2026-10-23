@@ -62,6 +62,12 @@ with sync_playwright() as p:
             assert state['modal_rect'][2]<state['viewport'][0]*.9
             click('button_close_invoice.png')
             wait('window.__TELANICO_STORY.modal==="assistant"')
+            state=page.evaluate('window.__TELANICO_STORY')
+            assert state['assistant_framed']
+            anchor=state['hud']['Assistant'];card=state['modal_rect']
+            units=state['viewport'][0]/width
+            assert abs(card[0]-anchor[0]*units)<1 and abs(card[1]-(anchor[1]+anchor[3]+8)*units)<1
+            assert all(r[2]>=200 and r[3]>=54 for r in state['hud'].values())
             page.screenshot(path=str(out/f'assistant-{width}.png'))
             click('CONTINUE')
             wait('!window.__TELANICO_STORY.locked')
