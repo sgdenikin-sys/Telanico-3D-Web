@@ -1,1 +1,1 @@
-{"branch": "codex/telanico-overworld-v2-1", "camera_elevation_above_horizontal": 40, "camera_projection": "orthographic", "commit": "8319d91c56be7bfbd25535a5a802e5e7de44662c", "source_run_id": "39494743117", "version": "telanico-v2.1"}
+{"branch": "fix/v22-web-release", "camera_elevation_above_horizontal": 40, "camera_projection": "orthographic", "commit": "2c94a3f687e7174340360885e069336b73cf599e", "source_run_id": "local", "version": "telanico-v2.2"}

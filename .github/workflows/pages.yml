@@ -6,6 +6,8 @@ on:
     paths:
       - 'site/**'
       - '.github/workflows/pages.yml'
+      - 'tools/verify_release.py'
+      - 'tools/release-v22.json'
   workflow_dispatch:
 
 permissions:
@@ -20,7 +22,7 @@ concurrency:
 jobs:
   deploy:
     name: Deploy public Godot web build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,6 +33,7 @@ jobs:
       - name: Verify deployable website
         run: |
           test -s site/index.html
+          python3 tools/verify_release.py
           echo "Deploying only the site/ directory"
 
       - name: Configure GitHub Pages

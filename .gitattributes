@@ -1,0 +1,2 @@
+# Runtime SHA-256 hashes must survive Windows -> Linux publication byte-for-byte.
+site/** -text
