@@ -38,6 +38,11 @@ jobs:
           python3 tools/verify_release.py
           echo "Deploying only the site/ directory"
 
+      - name: Stage isolated Settlements Hall review asset
+        env:
+          TELANICO_LAB_ARTIFACT_TOKEN: ${{ secrets.TELANICO_LAB_ARTIFACT_TOKEN }}
+        run: python3 tools/stage_hall_preview.py
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 

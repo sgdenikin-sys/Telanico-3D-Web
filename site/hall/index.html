@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#101e28">
+<title>Telanico · Settlements Hall 3D</title>
+<style>
+:root{color-scheme:dark;--panel:rgba(13,27,38,.87);--stroke:rgba(212,185,123,.28);--gold:#e0bb76;--ivory:#f7edda;--muted:#adb9bc}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#172b35;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ivory)}#view{position:fixed;inset:0;touch-action:none;cursor:grab}#view:active{cursor:grabbing}#view canvas{display:block;width:100%;height:100%}.shade{pointer-events:none;position:fixed;inset:0;background:linear-gradient(180deg,rgba(4,17,25,.5),transparent 27%,transparent 66%,rgba(4,17,25,.45))}.head{position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 15px) calc(env(safe-area-inset-right,0px) + 18px) 10px calc(env(safe-area-inset-left,0px) + 18px);gap:12px;pointer-events:none}.head div{min-width:0}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--gold);font-weight:700}.head h1{margin:2px 0 0;font-size:clamp(17px,2.4vw,26px);font-weight:650;letter-spacing:.02em}.head .hint{font-size:12px;color:#c4c9c5;text-align:right;line-height:1.45}.controls{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);left:calc(env(safe-area-inset-left,0px) + 18px);right:calc(env(safe-area-inset-right,0px) + 18px);display:flex;gap:9px;justify-content:center;flex-wrap:wrap;align-items:center}button,.pick{border:1px solid var(--stroke);background:var(--panel);border-radius:11px;padding:11px 14px;min-height:44px;color:var(--ivory);font:600 13px system-ui;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}button:hover,.pick:hover{border-color:var(--gold);background:rgba(41,60,67,.95)}button:focus-visible,.pick:focus-visible{outline:2px solid var(--gold)}button.primary{background:var(--gold);color:#182932;border-color:var(--gold)}button:disabled{opacity:.45;cursor:default}#file{display:none}#load-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;padding:15px}#load-card{pointer-events:auto;border:1px solid var(--stroke);background:rgba(9,25,36,.93);padding:24px 26px;border-radius:20px;box-shadow:0 18px 75px #0007;text-align:center;max-width:380px}#load-card h2{margin:0 0 8px;font-size:21px}#load-card p{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 16px}.pick{display:inline-block;background:var(--gold);color:#172a33;font-weight:750}.pick input{display:none}#status{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 78px);left:50%;transform:translateX(-50%);white-space:nowrap;color:#d2d9d5;text-shadow:0 1px 5px #000;font:12px system-ui;pointer-events:none}#perf{position:absolute;right:18px;top:83px;text-align:right;color:#9cbaab;font-size:11px;line-height:1.5;pointer-events:none}#drop{position:absolute;inset:12px;border:2px dashed var(--gold);border-radius:16px;pointer-events:none;display:none}body.dragging #drop{display:block}body.ready #load-overlay{display:none}body:not(.ready) .controls button{opacity:.45;pointer-events:none}body.ready #status{opacity:.75}@media(max-width:650px){.head{padding-top:calc(env(safe-area-inset-top,0px) + 8px)}.head h1{font-size:17px}.head .hint{font-size:10px}.eyebrow{font-size:9px}.controls{bottom:calc(env(safe-area-inset-bottom,0px) + 7px);gap:5px;left:8px;right:8px}.controls button{font-size:11px;padding:9px 9px;min-height:40px;border-radius:8px}#perf{top:64px;right:10px}#status{bottom:calc(env(safe-area-inset-bottom,0px) + 61px);font-size:10px}#load-card{padding:17px 20px}#load-card h2{font-size:18px}}@media (max-height:410px){.head h1{font-size:16px}.head .hint{display:none}#perf{top:52px}.controls button{min-height:36px;padding:8px}#status{bottom:52px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="view" aria-label="Interactive three-dimensional Settlements Hall"></div><div class="shade"></div><div id="drop"></div>
+<header class="head"><div><div class="eyebrow">TELANICO / 3D ASSET LAB</div><h1>Settlements Hall</h1></div><div class="hint">Drag to rotate · Pinch / scroll to zoom<br>Independent doors & fabric animation</div></header>
+<div id="perf">Starting renderer...</div>
+<div id="load-overlay"><div id="load-card"><h2 id="load-title">Loading Settlements Hall</h2><p id="load-description">Preparing the interactive 3D model.</p><label class="pick" for="file">Choose model ZIP / GLB<input type="file" id="file" accept=".zip,.glb,model/gltf-binary,application/zip"></label></div></div>
+<div id="status" role="status" aria-live="polite">WebGL 3D viewer</div>
+<div class="controls"><button id="open" class="primary" disabled>Open doors</button><button id="close" disabled>Close doors</button><button id="wind" disabled>Wind: on</button><button id="demo" disabled>Demo</button><button id="reset" disabled>Reset view</button><button id="choose">Load ZIP / GLB</button></div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const status=document.querySelector('#status'),perf=document.querySelector('#perf');
+const message=(m)=>{status.textContent=m};
+const el=document.querySelector('#view');
+const scene=new THREE.Scene();scene.background=new THREE.Color('#223642');
+scene.fog=new THREE.Fog('#223642',100,190);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.setSize(innerWidth,innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+el.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.15,240);
+camera.position.set(29,23,32);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,7,0);controls.enableDamping=true;controls.dampingFactor=.09;
+controls.minDistance=12;controls.maxDistance=85;controls.maxPolarAngle=Math.PI*.49;controls.minPolarAngle=.18;
+controls.update();
+scene.add(new THREE.HemisphereLight(0xc5e1ff,0x847b66,2.45));
+const sun=new THREE.DirectionalLight(0xffe3b0,3.1);sun.position.set(-16,32,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-30;sun.shadow.camera.right=30;sun.shadow.camera.top=30;sun.shadow.camera.bottom=-30;sun.shadow.camera.far=110;sun.shadow.bias=-.0001;scene.add(sun);
+const fill=new THREE.DirectionalLight(0x98cbdf,1.45);fill.position.set(15,16,-12);scene.add(fill);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(150,150),new THREE.MeshStandardMaterial({color:0x263a3c,roughness:.95,metalness:0}));ground.rotation.x=-Math.PI/2;ground.position.y=-.025;ground.receiveShadow=true;scene.add(ground);
+const grid=new THREE.GridHelper(100,40,0x4e6c70,0x354f52);grid.position.y=-.018;grid.material.transparent=true;grid.material.opacity=.16;scene.add(grid);
+const loader=new GLTFLoader();let model=null,mixer=null,windAction=null,doorAction=null,demoAction=null,clips=[];let lastLoaded='';
+const choose=document.querySelector('#file');document.querySelector('#choose').addEventListener('click',()=>choose.click());choose.addEventListener('change',()=>{if(choose.files?.[0])loadPickedFile(choose.files[0])});
+const button=(id,fn)=>document.getElementById(id).addEventListener('click',fn);
+const clip=(name)=>clips.find(a=>a.name===name)||clips.find(a=>a.name.toLowerCase().startsWith(name.toLowerCase()));
+const playWind=()=>{if(!mixer)return;const target=clip('Flags_Wind');if(!target){message('No wind animation in this file');return;}if(demoAction)demoAction.stop();windAction=mixer.clipAction(target);windAction.setLoop(THREE.LoopRepeat,Infinity);windAction.reset().play();document.querySelector('#wind').textContent='Wind: on'};
+const stopWind=()=>{windAction?.stop();windAction=null;document.querySelector('#wind').textContent='Wind: off'};
+const stopDemo=()=>{if(demoAction){demoAction.stop();demoAction=null;}if(!windAction)playWind()};
+const playDoors=(name)=>{if(!mixer)return;stopDemo();doorAction?.stop();const c=clip(name);if(!c){message('Missing animation: '+name);return;}doorAction=mixer.clipAction(c);doorAction.setLoop(THREE.LoopOnce,1);doorAction.clampWhenFinished=true;doorAction.reset().play();message(name==='Doors_Open'?'Opening doors 100°':'Closing doors')};
+button('open',()=>playDoors('Doors_Open'));button('close',()=>playDoors('Doors_Close'));
+button('wind',()=>windAction?stopWind():playWind());
+button('demo',()=>{if(!mixer)return;doorAction?.stop();stopWind();const c=clip('Hall_Demo');if(c){demoAction=mixer.clipAction(c);demoAction.setLoop(THREE.LoopRepeat,Infinity);demoAction.reset().play();message('Door and flag demo')}else{playWind();message('Demo clip not available')}});
+button('reset',()=>{camera.position.set(29,23,32);controls.target.set(0,7,0);controls.update();message('View reset')});
+async function loadBuffer(buf,label){
+ message('Decoding 3D model...');
+ const gltf=await loader.parseAsync(buf,'');
+ if(model){scene.remove(model);model.traverse(o=>{if(o.isMesh){o.geometry?.dispose()}})}
+ if(mixer)mixer.stopAllAction();model=gltf.scene;clips=gltf.animations;mixer=new THREE.AnimationMixer(model);scene.add(model);
+ model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material?.transparent){o.material.depthWrite=false;} }});
+ document.body.classList.add('ready');document.querySelectorAll('.controls button').forEach(x=>x.disabled=false);
+ document.querySelector('#load-overlay').style.display='none';
+ lastLoaded=label;
+ const n=clips.length;const shapes=[];model.traverse(o=>{if(o.isMesh)shapes.push(o)});
+ perf.textContent=`${shapes.length} meshes · ${n} animation clips`;
+ playWind();message(`${label} · ${n} animations loaded`);
+ }
+async function loadPickedFile(file){
+ try{
+  let bytes;
+  if(file.name.toLowerCase().endsWith('.zip')){
+   document.getElementById('load-title').textContent='Reading ZIP archive';
+   message('Extracting GLB from ZIP...');
+   const JSZip=(await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm')).default;
+   const zip=await JSZip.loadAsync(file);
+   const names=Object.keys(zip.files).filter(n=>n.toLowerCase().endsWith('.glb')&&!zip.files[n].dir);
+   if(!names.length)throw Error('No GLB found inside ZIP');
+   names.sort((a,b)=>a.length-b.length);
+   bytes=await zip.files[names[0]].async('arraybuffer');
+  }else bytes=await file.arrayBuffer();
+  await loadBuffer(bytes,file.name);
+ }catch(e){console.error(e);message('Cannot open model: '+e.message);document.getElementById('load-title').textContent='Could not load model';document.getElementById('load-description').textContent=e.message;document.getElementById('load-overlay').style.display='grid';}
+}
+let dragCount=0;window.addEventListener('dragenter',e=>{e.preventDefault();dragCount++;document.body.classList.add('dragging')});window.addEventListener('dragleave',e=>{e.preventDefault();dragCount=Math.max(0,dragCount-1);if(!dragCount)document.body.classList.remove('dragging')});window.addEventListener('dragover',e=>e.preventDefault());window.addEventListener('drop',e=>{e.preventDefault();dragCount=0;document.body.classList.remove('dragging');const file=e.dataTransfer?.files?.[0];if(file)loadPickedFile(file)});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6))});
+let prev=performance.now(),frames=0,fpsTime=prev,estimatedFps=0;
+renderer.setAnimationLoop(()=>{const now=performance.now();const dt=Math.min((now-prev)/1000,.1);prev=now;mixer?.update(dt);controls.update();renderer.render(scene,camera);frames++;if(now-fpsTime>1800){estimatedFps=Math.round(1000*frames/(now-fpsTime));fpsTime=now;frames=0;if(model)perf.textContent=`${estimatedFps} FPS · ${clips.length} animations · WebGL`;}});
+try{
+ const response=await fetch('./settlements_hall.glb',{cache:'force-cache'});
+ if(!response.ok)throw Error('Model not included with this preview');
+ const bytes=await response.arrayBuffer();await loadBuffer(bytes,'Settlements Hall');
+}catch(e){document.getElementById('load-title').textContent='Choose the 3D asset';document.getElementById('load-description').textContent='Select the ZIP delivered by Codex (or its GLB). The viewer loads it locally in your browser; nothing is uploaded.';message('Choose ZIP or GLB to start');}
+window.__TELANICO_HALL_VIEWER={get ready(){return !!model},get animations(){return clips.map(x=>x.name)},get fps(){return estimatedFps},get loaded(){return lastLoaded}};
+</script>
+</body></html>
