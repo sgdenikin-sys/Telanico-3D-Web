@@ -75,6 +75,14 @@ with sync_playwright() as p:
             page.screenshot(path=str(out/f'assistant-{width}.png'))
             click('CONTINUE')
             wait('!window.__TELANICO_STORY.locked')
+            scenery=page.evaluate('window.__TELANICO_STATE')
+            factor=0.8 if touch else 1.0
+            assert scenery['bushes']==36 and not scenery['world_control_glow']
+            assert scenery['controls_factor']==factor
+            units=scenery['viewport'][0]/width
+            assert abs(scenery['camera_control_size'][0]/units-104*factor)<1
+            assert abs(scenery['camera_control_size'][1]/units-52*factor)<1
+            print('LIVE_ATMOSPHERE_PASS',width,'bushes',scenery['bushes'],'controls',factor,flush=True)
             page.screenshot(path=str(out/f'world-{width}.png'))
             assert not errors, errors
             results.append({'width':width,'height':height,'touch':touch,'opening':'passed','errors':errors})

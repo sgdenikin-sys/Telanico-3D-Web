@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "94f261e22937086fb12a64e4d08cb03fa5fb60f2",
+  "source_commit": "4909d8ffbffe49e47a1104428d7dcc12982ce2a4",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -12,14 +12,14 @@
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "b676ead0d4c9664251c5f85607206452cfc030ca40699f33b8bab9a1a3cb732a",
+    "build.json": "efc5eb38340993b523f2c8e0fd24b7e0d439d5f6e7275c8788d6909021d50430",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "9eb2fddc99d7cf15aa10ae5b6c1a773b0d359d99ebde283160771bdf4fbca7e5",
+    "index.html": "7b55b370f01dc3705b340a2a48ebbad04a2fd520b30cb9505c22d67f97a0db01",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "75deea7ce6ce2b508c0b095313bda9c181d29e693dcefbd1120eb15df3d0cffe",
+    "index.pck": "e7e0e5559474061bd733f8be94b150f69f37843494309193b7271ab376f7fd47",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
