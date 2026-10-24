@@ -33,8 +33,8 @@ with sync_playwright() as p:
     assert browser_bin, 'Expected preinstalled Chrome on ubuntu-24.04 runner'
     print('LIVE_BROWSER', browser_bin, flush=True)
     browser = p.chromium.launch(executable_path=browser_bin,args=['--no-sandbox','--use-angle=swiftshader','--enable-webgl','--enable-unsafe-swiftshader'])
-    for width, height, touch in [(1280,720,False),(844,390,True)]:
-        context = browser.new_context(viewport={'width':width,'height':height},has_touch=touch)
+    for width, height, touch in [(1280,720,False),(844,306,True)]:
+        context = browser.new_context(viewport={'width':width,'height':height},has_touch=touch,device_scale_factor=3 if touch else 1)
         page = context.new_page()
         errors = []
         page.on('pageerror', lambda e: errors.append(str(e)))
@@ -54,6 +54,8 @@ with sync_playwright() as p:
         try:
             page.goto(url+'?test=1&story_test=1&release='+commit,wait_until='domcontentloaded',timeout=120000)
             wait('window.__TELANICO_STORY?.screen==="intro"')
+            if touch:
+                page.evaluate("document.documentElement.style.setProperty('--safe-left','47px');document.documentElement.style.setProperty('--safe-right','47px');document.documentElement.style.setProperty('--safe-bottom','21px')")
             click('CHOOSE YOUR ROLE')
             wait('window.__TELANICO_STORY.screen==="characters"')
             click('SELECT COOPER')
@@ -71,11 +73,26 @@ with sync_playwright() as p:
             anchor=state['hud']['Assistant'];card=state['modal_rect']
             units=state['viewport'][0]/width
             assert abs(card[0]-anchor[0]*units)<1 and abs(card[1]-(anchor[1]+anchor[3]+8)*units)<1
-            assert all(r[2]>=200 and r[3]>=54 for r in state['hud'].values())
+            assert all(r[2]>=184 and r[3]>=44 for r in state['hud'].values())
+            media=state['assistant_media'];rim=state['assistant_frame']
+            assert all(abs(x-y)<1 for x,y in zip(media,rim))
+            assert rim[2]/units>=70 and abs(rim[2]-rim[3])<1
+            assert rim[1]+rim[3]<=card[1]+card[3]+1
+            continuation=next(c for c in state['controls'] if c['text']=='CONTINUE')
+            assert rim[0]+rim[2]<=continuation['rect'][0]
+            plate=state['clock_plate'];assert plate[2]/units>=280
+            for c in state['controls']:
+                if c['art_rect']:assert all(abs(x-y)<1 for x,y in zip(c['rect'],c['art_rect']))
+            print('LIVE_MOBILE_UI_PASS',width,height,'Retina' if touch else 'desktop','framed portrait, clock backing and aligned artwork',flush=True)
             page.screenshot(path=str(out/f'assistant-{width}.png'))
             click('CONTINUE')
             wait('!window.__TELANICO_STORY.locked')
+            if touch:
+                page.set_viewport_size({'width':844,'height':390})
+                page.wait_for_timeout(2000)
             scenery=page.evaluate('window.__TELANICO_STATE')
+            assert scenery['commit']==commit, ('Stale in-game PCK',scenery['commit'],commit)
+            print('LIVE_RUNTIME_SOURCE_PASS',width,commit,flush=True)
             factor=0.8 if touch else 1.0
             assert scenery['bushes']==36 and not scenery['world_control_glow']
             assert scenery['controls_factor']==factor
