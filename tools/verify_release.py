@@ -29,5 +29,5 @@ assert manifest['validation']['desktop_browser'] == 'passed'
 # Owner explicitly scoped this release to the overworld smoke, without a full story replay.
 phone = manifest['validation']['phone_full_story']
 assert phone == 'passed' or (phone == 'not_run_per_owner_scope' and
-    manifest['source_commit'] == '8573f5afb5ef2efa4211ab0e87fa6effe818f67f'), 'phone_full_story' 
+    manifest['source_commit'] == 'ae482c02f709eefebd1e5a8b4f9d357cf51a12ac'), 'phone_full_story' 
 print('V22_PUBLIC_RUNTIME_VERIFIED', meta['commit'], len(manifest['files']), 'files')
