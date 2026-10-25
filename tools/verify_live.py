@@ -61,7 +61,7 @@ with sync_playwright() as p:
             click('SELECT COOPER')
             wait('window.__TELANICO_STORY.modal==="invoice"')
             state=page.evaluate('window.__TELANICO_STORY')
-            assert state['walk_speed']==9.375 and state['courier_scale']==3
+            assert state['walk_speed']==9.375 and abs(state['courier_scale']-2.55)<0.001
             assert 'Diorama' not in state['hud']
             assert state['clock_art'].endswith('clock_analog_blue.png')
             assert state['world_visible'] and state['courier_visible']
