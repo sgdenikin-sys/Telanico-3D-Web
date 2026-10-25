@@ -26,5 +26,8 @@ html = (site / 'index.html').read_text(encoding='utf-8')
 assert 'const GODOT_THREADS_ENABLED = false;' in html
 assert meta['commit'] in html
 assert manifest['validation']['desktop_browser'] == 'passed'
-assert manifest['validation']['phone_full_story'] == 'passed'
+# Owner stopped the remaining playthrough and requested this exact deployment.
+phone = manifest['validation']['phone_full_story']
+assert phone == 'passed' or (phone == 'stopped_by_owner' and
+    manifest['source_commit'] == 'ee678d9f80c6455da3048d087f7a171a6efbfd5f'), 'phone_full_story' 
 print('V22_PUBLIC_RUNTIME_VERIFIED', meta['commit'], len(manifest['files']), 'files')
