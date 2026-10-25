@@ -26,8 +26,8 @@ html = (site / 'index.html').read_text(encoding='utf-8')
 assert 'const GODOT_THREADS_ENABLED = false;' in html
 assert meta['commit'] in html
 assert manifest['validation']['desktop_browser'] == 'passed'
-# Owner stopped the remaining playthrough and requested this exact deployment.
+# Owner explicitly scoped this release to the overworld smoke, without a full story replay.
 phone = manifest['validation']['phone_full_story']
-assert phone == 'passed' or (phone == 'stopped_by_owner' and
-    manifest['source_commit'] == '5b7d02f344341ac412f7c5d1d491e42db5d8d0c9'), 'phone_full_story' 
+assert phone == 'passed' or (phone == 'not_run_per_owner_scope' and
+    manifest['source_commit'] == '8573f5afb5ef2efa4211ab0e87fa6effe818f67f'), 'phone_full_story' 
 print('V22_PUBLIC_RUNTIME_VERIFIED', meta['commit'], len(manifest['files']), 'files')
