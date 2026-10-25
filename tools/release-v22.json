@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "ee678d9f80c6455da3048d087f7a171a6efbfd5f",
+  "source_commit": "5b7d02f344341ac412f7c5d1d491e42db5d8d0c9",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -14,21 +14,44 @@
     "initial_browser_source": "01e17b6b79c2fa1b2cd554d410d2e9faebacf2cc",
     "initial_browser_desktop": "opening, office, wrong answer and menu passed",
     "initial_browser_touch": "partial through FX; stopped before full completion",
-    "final_build_checks": "Godot 4.6.3 export; Hall placement/materials/all animations and 15-site navigation native gates; browser departure and Hall render confirmed",
-    "remaining_browser_walk_return": "stopped by owner"
+    "final_build_checks": "Godot 4.6.3 focused Hall/15-site navigation/door and wind player/courier visual scale check and Web export passed. Full story not rerun per owner.",
+    "prior_published_build": {
+      "source_commit": "ee678d9f80c6455da3048d087f7a171a6efbfd5f",
+      "deploy_commit": "0b87c3237ec7010a56ed4f21791c5c264a85a53f",
+      "pages_run": 40149096854,
+      "result": "success; actual HTTPS runtime hashes and desktop/touch opening passed"
+    },
+    "owner_scale_request": "\u0417\u0434\u0430\u043d\u0438\u0435 \u043c\u043e\u0436\u043d\u043e \u0441\u0434\u0435\u043b\u0430\u0442\u044c \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u043c\u043d\u043e\u0433\u043e, \u0430 \u0433\u0435\u0440\u043e\u044f \u043d\u0435\u043c\u043d\u043e\u0433\u043e \u043c\u0435\u043d\u044c\u0448\u0435",
+    "visual_scale_change": {
+      "hall": [
+        0.55,
+        0.63
+      ],
+      "courier": [
+        3.0,
+        2.55
+      ],
+      "hall_offset": [
+        0,
+        0.04,
+        2.5
+      ],
+      "platform_front_metres": 8.485,
+      "canonical_entrance_metres": 8.5
+    }
   },
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "ffa9ec2d7fe0b2a5615c3606785a6a25da7a1dd374599c3a157b8cf11b54782c",
+    "build.json": "3672a61b31665709c20dae72793ea76f88cdac2a0e31521a5e36726a593cf781",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "388dc827a13f372893702edfcc8d3e384e8af8b8b706853f6d573ee9b8c9d967",
+    "index.html": "e6f594fe49df3e717eb2d0a97d09a64dc99dad6459c44214538771b1282af086",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "cbf5b5548018aeb67f12f27c75f4f64cb15778b2b396ce1e21e61dae2a4bb505",
+    "index.pck": "b27e1676f6c439c62295d87ee1a70cec4f41470363223582f127c242c4bf75ba",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
