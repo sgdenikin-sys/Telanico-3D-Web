@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "ae482c02f709eefebd1e5a8b4f9d357cf51a12ac",
+  "source_commit": "d9d6f2cb2bb24380da62bdeac5bcdaf46c604afd",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -9,22 +9,22 @@
     "physical_iphone_safari": "not tested"
   },
   "validation_notes": {
-    "scope": "One terrain/road Blender-Godot build and visual review, plus one corrective iteration for self-shadow bands and road edge clearance. No story regression.",
-    "routes": "Canonical route coordinates unchanged. Road cut depth reduced locally; terrain base heightfield unchanged.",
-    "visuals": "Unified rounded paving, world-scale texture coordinates, continuous meadow vertex tint, NW sunlight and attached object shadows. Operations V3 geometry, doors and textures unchanged."
+    "scope": "Owner-authored daylight V2 settings exported without further tuning. One overview capture, no gameplay replay.",
+    "lighting": "NW sun; energy .62, ambient .66, sky contribution .80, angular distance 1.4, shadow opacity .74.",
+    "visual": "Built Web runtime source matched requested commit; overview rendered without errors."
   },
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "86b01c8872f1b367cf0d82cfd5575fe3f89e05c3d31ded150fbf9b441d3b0419",
+    "build.json": "eef15f6271a935459cd4a8e5a311f44359f9dd93f121d695275d8f2e0becbd12",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "5731605e99223bd64cb1908ba989dfef68ae0be263fbd7d6ca7d8933299a6508",
+    "index.html": "2464837e3d5f8098b91ab13d32bede14efdb39cc65351ce0fea98b0b9f4bffdd",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "4d04c0ab49902e9777d98c8a93290b22c2c35c4c2c8ca1f1dc12429219a1b1b7",
+    "index.pck": "efa636dbbf0d27c60b4aed67abe57cec9e173dec03740c34c846949255e7ff29",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
