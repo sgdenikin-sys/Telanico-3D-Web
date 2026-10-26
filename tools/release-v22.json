@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "8c407ac50c62185e8c162289413e60c5f826bf30",
+  "source_commit": "f08b977f6364fbd8bad9be1a308495d04e15c229",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -9,23 +9,22 @@
     "physical_iphone_safari": "not tested"
   },
   "validation_notes": {
-    "scope": "One Godot 4.6.3 Web import/export and overworld smoke; one corrective ferry-placement build and one ferry-only recheck. No story regression.",
-    "native_checks": "Godot script compilation, asset import and Web export only; no separate gameplay regression gates.",
-    "transport": "Original pneumatic station at both tube sites, commuter ferry on existing moving parent, harbor launches at all three coastal placeholders. Existing route graph, selection targets and story timing retained. Door clips wired to station arrivals and ferry boarding.",
-    "captures": "Station and harbor launch from initial 00f2f58 smoke; corrected ferry from final source commit."
+    "scope": "One Godot 4.6.3 Web build and one overworld smoke with three captures. No full story regression.",
+    "native_checks": "GLB source geometry/UV/animation byte identity, Godot import and Web export only; no separate gameplay gates.",
+    "transport": "Owner-painted V2 GLBs with embedded MAIN/TRIM atlases; existing model paths, transforms, controllers, routes and story unchanged. Original packed Blend sources and PNG atlases preserved in artifacts/transport_production/v2-painted."
   },
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "6746651cf0fdfd5f6f258a614c64bfca3cf6686aee8684ee861ded7043e3dcdf",
+    "build.json": "0a929e4bcb6ac0e187471d418b2b411b068538ca4e77d19b9695cdaf24d576d4",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "83b6f7fd2ff79e5b2f2d29d2f9df30e64a3c1da096e048813115133195a6e60a",
+    "index.html": "6442f2787d2023387b9a2f5bc80b3a0db51e2c2015aaad296965e4e63eeeacd4",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "6417b7dad77ea72d08a4b8e50f5c0cfcdb9adbc9ad68c21ab144ad64e1243ea5",
+    "index.pck": "b47bcacf52d7c1c067bd3a3ad8dd1b5959a8ae11b3895cf3ff247522ed883e01",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
