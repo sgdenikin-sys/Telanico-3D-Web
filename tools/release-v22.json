@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "ed2749579b4ed2b09a0be19f481ddd30ceed600e",
+  "source_commit": "8c407ac50c62185e8c162289413e60c5f826bf30",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -9,22 +9,23 @@
     "physical_iphone_safari": "not tested"
   },
   "validation_notes": {
-    "scope": "One Web build and one overworld visual smoke; Hall, Operations and wide-map captures. No full story or asset rebuild.",
-    "atmosphere": "Tight .55m AO radius, 1.05 intensity; depth fog begins at 215m, caps at .12 at 310m, curve 1.7. Daylight V2 sun and ambient unchanged.",
-    "fake_contact_shadows": "none; existing Compatibility SSAO and directional shadows used."
+    "scope": "One Godot 4.6.3 Web import/export and overworld smoke; one corrective ferry-placement build and one ferry-only recheck. No story regression.",
+    "native_checks": "Godot script compilation, asset import and Web export only; no separate gameplay regression gates.",
+    "transport": "Original pneumatic station at both tube sites, commuter ferry on existing moving parent, harbor launches at all three coastal placeholders. Existing route graph, selection targets and story timing retained. Door clips wired to station arrivals and ferry boarding.",
+    "captures": "Station and harbor launch from initial 00f2f58 smoke; corrected ferry from final source commit."
   },
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "b0fc5b4e6180f56e53fd72679c9f5764e5f600144f8c9a503a9226ca9b6d8d42",
+    "build.json": "6746651cf0fdfd5f6f258a614c64bfca3cf6686aee8684ee861ded7043e3dcdf",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "1a033e51a1e383f23dca8f836e8aa00911570c85e9654c165809c7a140f73ee4",
+    "index.html": "83b6f7fd2ff79e5b2f2d29d2f9df30e64a3c1da096e048813115133195a6e60a",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "80e37064990a51927dbf549aaf99b2379a89676ae1b22e90d456cd9b71a026cc",
+    "index.pck": "6417b7dad77ea72d08a4b8e50f5c0cfcdb9adbc9ad68c21ab144ad64e1243ea5",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
