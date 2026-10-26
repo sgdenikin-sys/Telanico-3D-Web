@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Telanico — Transport Asset Inspector</title>
+<meta name="description" content="Telanico 3D production models: station, ferry, harbor launch. Interactive GLB inspection, animated doors and UV layouts.">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js"></script>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#e9edea;background:#101821;--muted:#a3b7bd;--accent:#92d5d7;--line:#394952;--panel:#19252e}
+*{box-sizing:border-box}body{margin:0}a{color:var(--accent)}
+main{max-width:1360px;margin:auto;padding:24px max(16px,env(safe-area-inset-right)) 44px max(16px,env(safe-area-inset-left))}
+header{display:flex;gap:20px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:21px}
+.eyebrow{text-transform:uppercase;letter-spacing:.19em;color:var(--accent);font-size:11px;font-weight:800}h1{font-size:clamp(24px,3.4vw,40px);line-height:1.12;letter-spacing:-.04em;margin:7px 0}p{color:var(--muted);line-height:1.5;margin:7px 0}
+.small{font-size:12px}nav{display:flex;gap:8px;flex-wrap:wrap}
+button{background:#273740;border:1px solid #4e6872;border-radius:10px;padding:11px 15px;color:#ecf6f5;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;transition:background .15s}
+button:hover{background:#354b56}button.active{color:#142329;background:#a6ddd9;border-color:#a6ddd9}
+.shell{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,360px);gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.stage{height:clamp(390px,58vw,640px);position:relative;background:radial-gradient(ellipse at 50% 38%,#385464 0%,#202e39 55%,#18232c 100%)}
+model-viewer{display:block;width:100%;height:100%;--poster-color:transparent}
+.stage-label{position:absolute;top:14px;left:16px;pointer-events:none;font-size:11px;letter-spacing:.08em;color:#d6ebea;background:#16242acc;padding:8px 11px;border-radius:8px}
+.controls{padding:15px 18px;border-top:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.controls .push{margin-left:auto}.meta{padding:3px 18px 18px}.meta h2{margin:13px 0 2px;font-size:21px}
+#status{font-size:12px;color:#bad1d0}
+.side-head{padding:18px 19px 9px}.side-head h2{font-size:18px;margin:0}
+.uvnav{padding:0 18px 12px;display:flex;gap:8px}
+.uvnav button{padding:8px 13px;min-height:36px;font-size:12px}
+.uv-image{width:100%;aspect-ratio:1;object-fit:contain;display:block;background:#edf1ed}
+.sidefoot{padding:14px 17px;border-top:1px solid var(--line)}
+.links{padding:12px 17px 18px;display:grid;gap:8px;font-size:13px}
+footer{margin-top:19px;padding-top:13px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+@media(max-width:800px){.shell{grid-template-columns:1fr}.stage{height:min(66svh,480px);min-height:305px}main{padding-top:18px}.controls .push{margin-left:0}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div>
+<div class="eyebrow">Telanico · ex VorGun · 3D production</div>
+<h1>Transport Asset Inspector</h1>
+<p>Первые модели Blender: вращай объект, приблизь детали, проверь двери и UV-развёртку. Отдельно от игрового сайта.</p>
+<p class="small">Source: <a href="https://github.com/sgdenikin-sys/Telanico-3D-Lab/commit/8a77af526673e67adc6b21f822e1202bdace601f">8a77af5</a> · Blender 4.3.2 · Godot-compatible GLB · Original game unchanged</p>
+</div>
+<nav aria-label="Model selection">
+<button type="button" data-asset="pneumatic_station" class="active">Пневмостанция</button>
+<button type="button" data-asset="commuter_ferry">Паром</button>
+<button type="button" data-asset="harbor_launch">Катер</button>
+</nav>
+</header>
+<div class="shell">
+<section class="panel">
+<div class="stage">
+<model-viewer id="viewer" src="./pneumatic_station.glb" alt="3D модель пневмостанции Telanico" camera-controls touch-action="pan-y" disable-pan camera-orbit="35deg 68deg auto" shadow-intensity="1" exposure="1.25" interaction-prompt="auto"></model-viewer>
+<div class="stage-label">3D · вращение: один палец / мышь · масштаб: два пальца / колесо</div>
+</div>
+<div class="controls">
+<button id="open" type="button">Открыть двери</button>
+<button id="close" type="button">Закрыть двери</button>
+<button id="reset" type="button">Сбросить ракурс</button>
+<span class="push" id="status">Загрузка модели…</span>
+</div>
+<div class="meta">
+<h2 id="asset-title">Пневматическая станция</h2>
+<p id="asset-text">Цилиндрическая стеклянная башня, полый зал, бронзовый каркас и двустворчатый вход.</p>
+<p class="small"><span id="triangles">8 146</span> triangles · <span id="door-count">2</span> hinged door(s) · UV0 2048×2048 · No final painted textures</p>
+</div>
+</section>
+<aside class="panel">
+<div class="side-head"><h2>UV-развёртка</h2><p class="small">Настоящие экспортированные острова UV0, не концептуальная схема.</p></div>
+<div class="uvnav">
+<button class="active" id="guide" type="button">С подписями</button>
+<button id="clean" type="button">Чистая UV</button>
+</div>
+<a id="uv-link" href="./pneumatic_station_uv_guide.png" target="_blank" rel="noopener"><img id="uv" class="uv-image" alt="Развёртка модели" src="./pneumatic_station_uv_guide.png"></a>
+<div class="sidefoot small">Нажми на UV-схему для увеличения до 2048×2048. Чистая UV парома доступна в закрытом GitHub.</div>
+<div class="links"><a id="src-link" target="_blank" rel="noopener" href="https://github.com/sgdenikin-sys/Telanico-3D-Lab/tree/main/artifacts/transport_production/v1/pneumatic_station">Исходники BLEND / GLB / отчёты (закрытый GitHub)</a><a id="render-link" target="_blank" rel="noopener" href="https://github.com/sgdenikin-sys/Telanico-3D-Lab/blob/main/artifacts/transport_production/v1/pneumatic_station/isometric.png">Оригинальный рендер Blender</a><a id="inside-link" target="_blank" rel="noopener" href="https://github.com/sgdenikin-sys/Telanico-3D-Lab/blob/main/artifacts/transport_production/v1/pneumatic_station/interior_doors_open.png">Рендер интерьера и открытых дверей</a></div>
+</aside>
+</div>
+<footer>Это отдельная демонстрационная галерея 3D-ассетов. Действующая игра Telanico не изменялась. Модельные материалы предварительные; финальные текстуры будут изготовлены по UV. Если 3D не загружается, проверь поддержку WebGL и доступность внешнего компонента model-viewer.</footer>
+</main>
+<script>
+const configs={
+pneumatic_station:{title:"Пневматическая станция",text:"Цилиндрическая стеклянная башня, полый зал, бронзовый каркас и двустворчатый вход.",tri:"8 146",doors:2},
+commuter_ferry:{title:"Пассажирский паром",text:"Вытянутый корпус, прозрачный свод, отдельная каюта, два шарнира дверей.",tri:"10 755",doors:2},
+harbor_launch:{title:"Малый портовый катер",text:"Моделированный корпус, кабина, тонированное стекло и открывающаяся дверь.",tri:"7 189",doors:1}
+};
+const q=id=>document.getElementById(id);let current="pneumatic_station",kind="uv_guide";
+const viewer=q("viewer");
+function load(id){
+current=id;const d=configs[id];
+document.querySelectorAll("[data-asset]").forEach(b=>{b.classList.toggle("active",b.dataset.asset===id);});
+q("asset-title").textContent=d.title;q("asset-text").textContent=d.text;
+q("triangles").textContent=d.tri;q("door-count").textContent=d.doors;
+viewer.pause();viewer.removeAttribute("animation-name");viewer.src="./"+id+".glb";
+q("status").textContent="Загрузка модели…";showUV();
+let base="https://github.com/sgdenikin-sys/Telanico-3D-Lab/";
+let path="artifacts/transport_production/v1/"+id+"/";
+q("src-link").href=base+"tree/main/"+path;
+q("render-link").href=base+"blob/main/"+path+"isometric.png";
+q("inside-link").href=base+"blob/main/"+path+"interior_doors_open.png";
+}
+function showUV(){
+if(current==="commuter_ferry" && kind==="uv_layout")kind="uv_guide";
+q("clean").disabled=current==="commuter_ferry";
+q("clean").title=current==="commuter_ferry"?"Оригинальная чистая UV доступна в закрытом GitHub":"Чистая UV-развёртка";
+let src="./"+current+"_"+kind+".png";
+q("uv").src=src;q("uv-link").href=src;
+q("guide").classList.toggle("active",kind==="uv_guide");
+q("clean").classList.toggle("active",kind==="uv_layout");
+}
+function motion(name){
+if(!viewer.loaded){q("status").textContent="Модель ещё загружается";return;}
+viewer.pause();viewer.animationName=name;viewer.currentTime=0;
+viewer.play({repetitions:1});q("status").textContent="Анимация "+name;
+}
+document.querySelectorAll("[data-asset]").forEach(b=>b.addEventListener("click",()=>load(b.dataset.asset)));
+q("guide").addEventListener("click",()=>{kind="uv_guide";showUV()});
+q("clean").addEventListener("click",()=>{kind="uv_layout";showUV()});
+q("open").addEventListener("click",()=>motion("Doors_Open"));
+q("close").addEventListener("click",()=>motion("Doors_Close"));
+q("reset").addEventListener("click",()=>{viewer.resetTurntableRotation();viewer.jumpCameraToGoal();viewer.cameraOrbit="35deg 68deg auto";});
+viewer.addEventListener("load",()=>{q("status").textContent="3D загружена · дверные клипы: "+(viewer.availableAnimations||[]).join(", ")});
+viewer.addEventListener("error",()=>{q("status").textContent="Ошибка загрузки 3D. См. ссылку на исходники.";});
+</script>
+</body></html>
