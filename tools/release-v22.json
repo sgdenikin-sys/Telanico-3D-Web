@@ -1,6 +1,6 @@
 {
   "version": "telanico-v2.2",
-  "source_commit": "f08b977f6364fbd8bad9be1a308495d04e15c229",
+  "source_commit": "15a0709c3419d19a29ec46968887f029b9e7dfb3",
   "build_environment": "Linux-6.18.55-x86_64-with-glibc2.41",
   "validation": {
     "native_release_gates": "passed",
@@ -9,22 +9,22 @@
     "physical_iphone_safari": "not tested"
   },
   "validation_notes": {
-    "scope": "One Godot 4.6.3 Web build and one overworld smoke with three captures. No full story regression.",
-    "native_checks": "GLB source geometry/UV/animation byte identity, Godot import and Web export only; no separate gameplay gates.",
-    "transport": "Owner-painted V2 GLBs with embedded MAIN/TRIM atlases; existing model paths, transforms, controllers, routes and story unchanged. Original packed Blend sources and PNG atlases preserved in artifacts/transport_production/v2-painted."
+    "scope": "Bounded Web export and one overworld smoke: three landmark captures, one Finance trip/entry, no full story regression. One source-staging correction before final export.",
+    "native_checks": "Hall geometry/UV/morph/animation binary identity; Godot 4.6.3 controller: doors 100 degrees, four flags and loop seam, independent wind/doors, glass alpha. Meridian isolated import already passed. No broad gameplay gates.",
+    "models": "Painted Hall V4 replaces existing Hall visual, scale .63 and placement retained. Painted Meridian Palace Lite replaces free home_B at Trade Finance, scale .52, offset (0,.04,1.404). Routes, story, other models and lighting unchanged."
   },
   "disabled_features": [],
   "files": {
     "LICENSES.html": "02cc72af9c71ddcb45316d2f5cb5c1eb9f111f020d14a7ab2fc7e940d9cb9bf6",
     "audio_bridge.js": "b41d101a776b4bc491f8579435d3122e95fceb2a0823a370d1ec6a1c94d722b8",
-    "build.json": "0a929e4bcb6ac0e187471d418b2b411b068538ca4e77d19b9695cdaf24d576d4",
+    "build.json": "55d4da624958c6c8298729ee75e41ae92fb64875f7e4ef8323ae82c890c51bb6",
     "index.apple-touch-icon.png": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a",
     "index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "6442f2787d2023387b9a2f5bc80b3a0db51e2c2015aaad296965e4e63eeeacd4",
+    "index.html": "2d101bc6f857aec51bb74a46ead9759aa7880250f4a70778d1368b49a657a94f",
     "index.icon.png": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5",
     "index.js": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981",
-    "index.pck": "b47bcacf52d7c1c067bd3a3ad8dd1b5959a8ae11b3895cf3ff247522ed883e01",
+    "index.pck": "b9225e193a91170b564f251b91b19025f1c8c0144244cd91102ff90bbd367b18",
     "index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
     "index.wasm": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
     "media/bird_takeoff_soft_purr.wav": "d478efeac58685f0f8ed7e9b69273daf25b39fc6f78d1ab150910c951dd65c81",
